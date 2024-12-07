@@ -7,9 +7,20 @@ export type ModalDataType = {
 export type RootStackParamList = {
     Home: undefined;
     Profile: undefined;
-    Modal: undefined;
+    Nativepaper: undefined;
 };
 
 export interface RootTypeAppState {
     modalVisible: boolean;
+}
+
+export type IData = {
+    id: number;
+    username: string;
+    email: string;
+}
+
+export interface FormDataAddUserType {
+    username: string;
+    email: string;
 }

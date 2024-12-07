@@ -3,7 +3,6 @@ import { View, Text, Button } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from "../../types";
-import { modalData } from "../../constants";
 
 function Homepage() {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -17,7 +16,7 @@ function Homepage() {
         </View>
 
         <View style={{ marginTop: 20 }}>
-            <Button onPress={() => navigation.navigate('Modal', { ...modalData })} title="Go to Modal Page" />
+            <Button onPress={() => navigation.navigate('Nativepaper')} title="Go to Native Page" />
         </View>
       </View>
     );

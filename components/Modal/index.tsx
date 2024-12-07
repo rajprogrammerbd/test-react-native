@@ -1,29 +1,22 @@
 import { FC, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableNativeFeedback, Easing } from "react-native";
+import { View, Text, StyleSheet, TouchableNativeFeedback, Easing, TextInput, Button } from "react-native";
 import { useTransition, animated, useSprings } from "@react-spring/native";
 import { useDispatch, useSelector } from "react-redux";
+import { useForm, Controller, SubmitHandler, FieldValues } from 'react-hook-form';
 import { handleModalVisible } from "../../utils/slices/appSlice";
 import { RootState } from "../../utils/store";
 import { modalData } from "../../constants";
+import { FormDataAddUserType } from "../../types";
 
 const Modal: FC = () => {
+    const { control, handleSubmit, formState: { errors } } = useForm<FormDataAddUserType>();
+
     const dispatch = useDispatch();
     const show = useSelector((root: RootState) => root.appSlice.modalVisible);
 
-    const [styleds, api] = useSprings(4, index => ({
-        opacity: 0,
-        y: 20,
-        config: { tension: 170, friction: 26 },
-      }));
-
-      useEffect(() => {
-        api.start(i => ({
-          opacity: 1,
-          y: 0,
-          duration: 500,
-          delay: i * 1000,
-        }));
-      }, [api]);
+    const onSubmit: SubmitHandler<FormDataAddUserType> = data => {
+        console.log(data);
+    };
 
     const config = {
         duration: 210,
@@ -41,7 +34,6 @@ const Modal: FC = () => {
     const handleModal = () => {
         dispatch(handleModalVisible());
     }
-    const { paragraph, subtitle, title } = modalData;
 
     return transitions(
         (styled, item) => item && (
@@ -52,15 +44,23 @@ const Modal: FC = () => {
                 </TouchableNativeFeedback>
 
                 <View style={styles.showedWrapper}>
-                    <animated.Text style={[styles.subTitleStyle, { opacity: styleds[0].opacity, translateY: styleds[0].y }]}>{subtitle}</animated.Text>
-                    <animated.Text style={[styles.title, { opacity: styleds[0].opacity, translateY: styleds[1].y }]}>{title}</animated.Text>
-                    <animated.Text style={[styles.paragraph, { opacity: styleds[0].opacity, translateY: styleds[2].y }]}>{paragraph}</animated.Text>
-
-                    <TouchableNativeFeedback onPress={handleModal}>
-                        <View style={styles.closeButton}>
-                            <Text style={styles.closeButtonText}>Close</Text>
-                        </View>
-                    </TouchableNativeFeedback>
+                    <Controller
+                        control={control}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            placeholder="Enter your username"
+                            value={value}
+                        />
+                        )}
+                        name="username"
+                        rules={{ required: 'Username is required' }}
+                    />
+                    {errors.username && <Text>{errors.username.message}</Text>}
+                    {errors.email && <Text>{errors.email.message}</Text>}
+                    <Button title="Submit" onPress={handleSubmit(onSubmit)} />
                 </View>
             </View>
         </animated.View>

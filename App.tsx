@@ -13,9 +13,9 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-          <MyDrawer />
+            <MyDrawer />
 
-          <Modal />
+            <Modal />
       </NavigationContainer>
     </Provider>
   );
